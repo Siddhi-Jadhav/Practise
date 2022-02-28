@@ -23,14 +23,14 @@ export class BlogService {
     return this.blogRepository.createBlog(createBlogDto, user);
   }
 
-  async getBlogById(id: string) {
+  /*async getBlogById(id: string) {
     //select * from blog where id = {id}
     const blog = await this.blogRepository.findOne(id);
     if (!blog) {
       throw new NotFoundException('BLOG NOT FOUND');
     }
     return blog;
-  }
+  }*/
 
   async deleteBlog(id: string) {
     //try deleting the blog with id
