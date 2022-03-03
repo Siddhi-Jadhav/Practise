@@ -2,6 +2,7 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
 
 export class AuthCredentialsSigninDTO {
+
   @IsNotEmpty()
   @MinLength(10)
   email: string;

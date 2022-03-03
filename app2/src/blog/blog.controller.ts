@@ -1,3 +1,4 @@
+import { UpdateBlogDTO } from './dto/update.blog.dto';
 import { UserEntity } from '../user/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { SearchBlogDTO } from './dto/search.blog.dto';
@@ -11,6 +12,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
   UsePipes,
@@ -33,13 +35,22 @@ export class BlogController {
   }
 
   @Get()
-  getBlogs(@GetUser() user: UserEntity, @Query() searchBlogDto: SearchBlogDTO) {
+  getBlogs(@Query() searchBlogDto: SearchBlogDTO) {
     console.log(searchBlogDto);
-    return this.blogService.getBlogs(searchBlogDto, user);
+    return this.blogService.getBlogs(searchBlogDto);
+  }
+
+  @Put('/:id')
+  updateBlog(
+    @GetUser() user: UserEntity,
+    @Body() updateBlogDto: UpdateBlogDTO,
+    @Param('id') id: string,
+  ) {
+    return this.blogService.updateBlog(updateBlogDto, user, id);
   }
 
   @Delete('/:id')
-  deleteTask(@GetUser() user: UserEntity, @Param('id') id: string) {
-    return this.blogService.deleteBlog(id);
+  deleteBlog(@GetUser() user: UserEntity, @Param('id') id: string) {
+    return this.blogService.deleteBlog(id, user);
   }
 }

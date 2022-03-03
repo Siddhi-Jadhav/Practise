@@ -1,3 +1,4 @@
+import { UpdateBlogDTO } from './dto/update.blog.dto';
 import { UserEntity } from '../user/user.entity';
 import { BlogRepository } from './blog.repository';
 import { SearchBlogDTO } from './dto/search.blog.dto';
@@ -13,8 +14,8 @@ export class BlogService {
     private blogRepository: BlogRepository,
   ) {}
 
-  async getBlogs(searchBlogDto: SearchBlogDTO, user: UserEntity) {
-    return this.blogRepository.getBlogs(searchBlogDto, user);
+  async getBlogs(searchBlogDto: SearchBlogDTO) {
+    return this.blogRepository.getBlogs(searchBlogDto);
   }
 
   //create a new blog
@@ -23,16 +24,16 @@ export class BlogService {
     return this.blogRepository.createBlog(createBlogDto, user);
   }
 
-  /*async getBlogById(id: string) {
-    //select * from blog where id = {id}
-    const blog = await this.blogRepository.findOne(id);
+  async updateBlog(updateBlogDto: UpdateBlogDTO, user: UserEntity, id) {
+    const blog = await this.blogRepository.updateBlog(updateBlogDto, user, id);
     if (!blog) {
       throw new NotFoundException('BLOG NOT FOUND');
     }
+    //await blog.save();
     return blog;
-  }*/
+  }
 
-  async deleteBlog(id: string) {
+  async deleteBlog(id: string, user: UserEntity) {
     //try deleting the blog with id
     const result = await this.blogRepository.delete(id);
 

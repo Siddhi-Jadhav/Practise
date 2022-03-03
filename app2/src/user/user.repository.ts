@@ -14,7 +14,6 @@ export class UserRepository extends Repository<UserEntity> {
     user.LastName = authCredentialsSignupDTO.LastName;
     user.email = authCredentialsSignupDTO.email;
     user.password = `${crypto.MD5(authCredentialsSignupDTO.password)}`;
-
     await user.save();
   }
 

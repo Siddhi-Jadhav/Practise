@@ -3,10 +3,11 @@ import { EntityRepository, Repository } from 'typeorm';
 import { CreateBlogDTO } from './dto/create.blog.dto';
 import { SearchBlogDTO } from './dto/search.blog.dto';
 import { BlogEntity } from './blog.entity';
+import { UpdateBlogDTO } from './dto/update.blog.dto';
 
 @EntityRepository(BlogEntity)
 export class BlogRepository extends Repository<BlogEntity> {
-  async getBlogs(searchBlogDto: SearchBlogDTO, user: UserEntity) {
+  async getBlogs(searchBlogDto: SearchBlogDTO) {
     const { search } = searchBlogDto;
 
     const query = this.createQueryBuilder('blog');
@@ -16,7 +17,7 @@ export class BlogRepository extends Repository<BlogEntity> {
         { search: `%${search}%` },
       );
     }
-    query.andWhere(`blog.userId = :userId`, { userId: user.id });
+    //query.andWhere(`blog.userId = :userId`, { userId: user.id });
 
     return await query.getMany();
   }
@@ -35,5 +36,21 @@ export class BlogRepository extends Repository<BlogEntity> {
     delete blog.user;
 
     return blog;
+  }
+
+  async updateBlog(updateBlogDto: UpdateBlogDTO, user: UserEntity, id: string) {
+    const { title, content, tags } = updateBlogDto;
+
+    const query = this.createQueryBuilder('blog');
+    const result = query.andWhere(
+      `UPDATE blog
+      SET blog.title="${title}", blog.content=${content}, blog.tags=${tags}
+      WHERE id=${id}`,
+    );
+    let message = 'Error in updating';
+    if (result) {
+      message = 'Blog updated successfully';
+    }
+    return { message };
   }
 }
